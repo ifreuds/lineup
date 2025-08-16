@@ -225,6 +225,32 @@
             border-color: #ff4655;
         }
 
+        #sortSelect {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #sortSelect:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 70, 85, 0.5);
+        }
+
+        #sortSelect:focus {
+            outline: none;
+            border-color: #ff4655;
+        }
+
+        #sortSelect option {
+            background: #1a2332;
+            color: #fff;
+        }
+
         /* ========== LINEUP GRID SECTION ========== */
         .lineup-grid {
             display: grid;
@@ -276,16 +302,7 @@
             margin-left: -50%;
         }
 
-        .image-label {
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #fff;
-        }
+
 
         .lineup-divider {
             position: absolute;
@@ -353,7 +370,7 @@
             color: #f44336;
         }
 
-        .difficulty-pixel-perfect {
+        .difficulty-badge.difficulty-pixel-perfect {
             background: rgba(156, 39, 176, 0.2);
             color: #9C27B0;
         }
@@ -461,6 +478,136 @@
             object-fit: contain;
         }
 
+        /* Detail Bubbles */
+        .detail-bubbles {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-bubble {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: #fff;
+        }
+
+        .detail-bubble-icon {
+            font-size: 1.2rem;
+        }
+
+        .detail-bubble-label {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .detail-bubble-value {
+            color: #ff8b94;
+            font-weight: 600;
+        }
+
+        .detail-bubble.stance {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .detail-bubble.time {
+            background: rgba(33, 150, 243, 0.1);
+            border-color: rgba(33, 150, 243, 0.3);
+        }
+
+        .detail-bubble.difficulty-easy {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .detail-bubble.difficulty-medium {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: rgba(255, 193, 7, 0.3);
+        }
+
+        .detail-bubble.difficulty-hard {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: rgba(244, 67, 54, 0.3);
+        }
+
+        .detail-bubble.difficulty-pixel-perfect {
+            background: rgba(156, 39, 176, 0.1);
+            border-color: rgba(156, 39, 176, 0.3);
+        }
+
+        /* Instructions Section */
+        .instructions-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .instructions-section h3 {
+            color: #ff4655;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .instructions-list {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .instructions-list li {
+            counter-increment: step;
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 0.8rem;
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        .instructions-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            background: #ff4655;
+            width: 1.8rem;
+            height: 1.8rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: rgba(255, 193, 7, 0.05);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .tips-section h3 {
+            color: #FFC107;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tips-section p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
         .modal-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -481,34 +628,6 @@
         .info-section p {
             color: #b0b0b0;
             line-height: 1.6;
-        }
-
-        .instructions-list {
-            list-style: none;
-            counter-reset: step;
-        }
-
-        .instructions-list li {
-            counter-increment: step;
-            position: relative;
-            padding-left: 2rem;
-            margin-bottom: 0.5rem;
-            color: #b0b0b0;
-        }
-
-        .instructions-list li::before {
-            content: counter(step);
-            position: absolute;
-            left: 0;
-            background: #ff4655;
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
         }
 
         /* ========== EMPTY STATE ========== */
@@ -568,6 +687,16 @@
             <button class="filter-btn" onclick="filterByType('anti-rush')">Anti Rush</button>
         </div>
 
+        <div class="filter-section">
+            <span class="filter-label">Sort by:</span>
+            <select id="sortSelect" onchange="filterLineups()">
+                <option value="name">Name (A-Z)</option>
+                <option value="difficulty">Difficulty</option>
+                <option value="time">Flight Time</option>
+                <option value="newest">Newest First</option>
+            </select>
+        </div>
+
         <div class="lineup-grid" id="lineupGrid">
             <!-- Lineups will be loaded here -->
         </div>
@@ -583,27 +712,27 @@
             <div class="modal-body">
                 <div class="image-tabs">
                     <button class="image-tab active" onclick="showImage(0)">📍 Position</button>
-                    <button class="image-tab" onclick="showImage(1)">🎯 Lineup</button>
-                    <button class="image-tab" onclick="showImage(2)">💥 Landing</button>
-                    <button class="image-tab" onclick="showImage(3)">📐 Instructions</button>
+                    <button class="image-tab" onclick="showImage(1)">📐 Instructions</button>
+                    <button class="image-tab" onclick="showImage(2)">🎯 Lineup</button>
+                    <button class="image-tab" onclick="showImage(3)">💥 Landing</button>
                 </div>
                 
                 <div class="image-display">
                     <img id="modalImage" src="" alt="">
                 </div>
 
-                <div class="modal-info-grid">
-                    <div class="info-section">
-                        <h3>Instructions</h3>
-                        <ol class="instructions-list" id="modalInstructions"></ol>
-                    </div>
-                    <div class="info-section">
-                        <h3>Details</h3>
-                        <p><strong>Stance:</strong> <span id="modalStance"></span></p>
-                        <p><strong>Flight Time:</strong> <span id="modalFlightTime"></span></p>
-                        <p><strong>Difficulty:</strong> <span id="modalDifficulty"></span></p>
-                        <p><strong>Tips:</strong> <span id="modalRemarks"></span></p>
-                    </div>
+                <div class="detail-bubbles" id="detailBubbles">
+                    <!-- Bubbles will be inserted here -->
+                </div>
+
+                <div class="instructions-section">
+                    <h3>📝 Instructions</h3>
+                    <ol class="instructions-list" id="modalInstructions"></ol>
+                </div>
+
+                <div class="tips-section" id="tipsSection" style="display: none;">
+                    <h3>💡 Tips & Tricks</h3>
+                    <p id="modalRemarks"></p>
                 </div>
             </div>
         </div>
@@ -798,6 +927,25 @@
                 return;
             }
             
+            // Sort lineups based on selected option
+            const sortBy = document.getElementById('sortSelect')?.value || 'name';
+            
+            lineupsToRender.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return (a.title || '').localeCompare(b.title || '');
+                    case 'difficulty':
+                        const diffOrder = {'easy': 1, 'medium': 2, 'hard': 3, 'pixel-perfect': 4};
+                        return (diffOrder[a.difficulty] || 1) - (diffOrder[b.difficulty] || 1);
+                    case 'time':
+                        return (a.flight_time || 999) - (b.flight_time || 999);
+                    case 'newest':
+                        return (b.id || 0) - (a.id || 0);
+                    default:
+                        return (a.title || '').localeCompare(b.title || '');
+                }
+            });
+            
             lineupGrid.innerHTML = lineupsToRender.map(lineup => {
                 const difficultyClass = `difficulty-${lineup.difficulty?.replace(' ', '-') || 'easy'}`;
                 
@@ -808,14 +956,12 @@
                                 ${lineup.lineup_image_url 
                                     ? `<img src="${lineup.lineup_image_url}" alt="Lineup">`
                                     : '<div style="padding: 1rem;">No Image</div>'}
-                                <span class="image-label">Lineup</span>
                             </div>
                             <div class="lineup-divider"></div>
                             <div class="lineup-image-half landing-spot">
                                 ${lineup.landing_image_url 
                                     ? `<img src="${lineup.landing_image_url}" alt="Landing">`
                                     : '<div style="padding: 1rem;">No Image</div>'}
-                                <span class="image-label">Landing</span>
                             </div>
                         </div>
                         <div class="lineup-info">
@@ -842,16 +988,49 @@
             // Set modal title
             document.getElementById('modalTitle').textContent = currentLineup.title;
             
-            // Set instructions
-            const instructions = currentLineup.instructions?.split('\n') || [];
-            document.getElementById('modalInstructions').innerHTML = 
-                instructions.map(inst => `<li>${inst}</li>`).join('');
+            // Create detail bubbles
+            const difficultyClass = `difficulty-${currentLineup.difficulty?.replace(' ', '-') || 'easy'}`;
+            const bubblesHTML = `
+                <div class="detail-bubble stance">
+                    <span class="detail-bubble-icon">🚶</span>
+                    <div>
+                        <div class="detail-bubble-label">Stance</div>
+                        <div class="detail-bubble-value">${currentLineup.stance || 'Stand'}</div>
+                    </div>
+                </div>
+                <div class="detail-bubble time">
+                    <span class="detail-bubble-icon">⏱</span>
+                    <div>
+                        <div class="detail-bubble-label">Flight Time</div>
+                        <div class="detail-bubble-value">${currentLineup.flight_time ? `${currentLineup.flight_time}s` : 'Not specified'}</div>
+                    </div>
+                </div>
+                <div class="detail-bubble ${difficultyClass}">
+                    <span class="detail-bubble-icon">🎯</span>
+                    <div>
+                        <div class="detail-bubble-label">Difficulty</div>
+                        <div class="detail-bubble-value">${currentLineup.difficulty || 'Easy'}</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detailBubbles').innerHTML = bubblesHTML;
             
-            // Set details
-            document.getElementById('modalStance').textContent = currentLineup.stance || 'Stand';
-            document.getElementById('modalFlightTime').textContent = currentLineup.flight_time ? `${currentLineup.flight_time}s` : 'Not specified';
-            document.getElementById('modalDifficulty').textContent = currentLineup.difficulty || 'Easy';
-            document.getElementById('modalRemarks').textContent = currentLineup.remarks || 'No additional tips';
+            // Set instructions
+            const instructions = currentLineup.instructions?.split('\n').filter(i => i.trim()) || [];
+            document.getElementById('modalInstructions').innerHTML = 
+                instructions.length > 0 
+                    ? instructions.map(inst => `<li>${inst}</li>`).join('')
+                    : '<li>No instructions provided</li>';
+            
+            // Set tips
+            const tipsSection = document.getElementById('tipsSection');
+            const modalRemarks = document.getElementById('modalRemarks');
+            if (currentLineup.remarks && currentLineup.remarks.trim()) {
+                modalRemarks.textContent = currentLineup.remarks;
+                tipsSection.style.display = 'block';
+            } else {
+                tipsSection.style.display = 'none';
+            }
             
             // Show first image
             showImage(0);
@@ -861,11 +1040,12 @@
         }
 
         function showImage(index) {
+            // New order: Position, Instructions, Lineup, Landing
             const images = [
                 currentLineup.standing_image_url,
+                currentLineup.instruction_image_url,
                 currentLineup.lineup_image_url,
-                currentLineup.landing_image_url,
-                currentLineup.instruction_image_url
+                currentLineup.landing_image_url
             ];
             
             const modalImage = document.getElementById('modalImage');
