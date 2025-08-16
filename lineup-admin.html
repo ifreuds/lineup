@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineup Upload Admin - Brimstone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1923 0%, #1a2332 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff4655, #ff8b94);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 70, 85, 0.3);
+        }
+
+        .stat-card h3 {
+            color: #ff8b94;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .upload-form {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #ff8b94;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group select option {
+            background: #1a2332;
+            color: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff4655;
+            box-shadow: 0 0 10px rgba(255, 70, 85, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-upload-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .image-upload-box {
+            border: 2px dashed rgba(255, 70, 85, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-upload-box:hover {
+            border-color: #ff4655;
+            background: rgba(255, 70, 85, 0.05);
+        }
+
+        .image-upload-box.has-image {
+            border-style: solid;
+            border-color: #4CAF50;
+        }
+
+        .image-upload-box input[type="file"] {
+            display: none;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .upload-label {
+            color: #ff8b94;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #ff4655;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #ff5565;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 70, 85, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            margin-right: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .submit-section {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .recent-lineups {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .recent-lineups h2 {
+            color: #ff8b94;
+            margin-bottom: 1rem;
+        }
+
+        .lineup-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .lineup-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lineup-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .lineup-info {
+            flex: 1;
+        }
+
+        .lineup-title {
+            color: #ff8b94;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .lineup-meta {
+            color: #888;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .delete-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff4444;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #ff8b94;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #f44336;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .image-upload-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 Lineup Upload Admin</h1>
+            <p>Add new Brimstone lineups to the database</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Lineups</h3>
+                <p id="totalLineups">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Maps Covered</h3>
+                <p id="mapsCovered">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Today's Uploads</h3>
+                <p id="todayUploads">0</p>
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="upload-form">
+            <h2 style="color: #ff8b94; margin-bottom: 1.5rem;">Add New Lineup</h2>
+            
+            <form id="lineupForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Agent*</label>
+                        <select id="agent" required>
+                            <option value="">Select Agent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Map*</label>
+                        <select id="map" required>
+                            <option value="">Select Map</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Site*</label>
+                        <select id="site" required disabled>
+                            <option value="">Select Map First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Lineup Title*</label>
+                        <input type="text" id="title" placeholder="e.g., Default Plant Denial" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Type*</label>
+                        <select id="type" required>
+                            <option value="">Select Type</option>
+                            <option value="post-plant">Post Plant</option>
+                            <option value="retake">Retake</option>
+                            <option value="execute">Execute</option>
+                            <option value="control">Control</option>
+                            <option value="anti-rush">Anti Rush</option>
+                            <option value="one-way">One Way</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty*</label>
+                        <select id="difficulty" required>
+                            <option value="">Select Difficulty</option>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                            <option value="pixel-perfect">Pixel Perfect</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stance*</label>
+                        <select id="stance" required>
+                            <option value="">Select Stance</option>
+                            <option value="stand">Stand</option>
+                            <option value="crouch">Crouch</option>
+                            <option value="jump">Jump</option>
+                            <option value="jump-crouch">Jump + Crouch</option>
+                            <option value="run-jump">Running Jump</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Standing Spot Name</label>
+                        <input type="text" id="standingSpotName" placeholder="e.g., A Wine Corner, B Long Entry">
+                    </div>
+                    <div class="form-group">
+                        <label>Landing Spot Name</label>
+                        <input type="text" id="landingSpotName" placeholder="e.g., Default Plant, Heaven, Backsite">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Flight Time (seconds)</label>
+                        <input type="number" id="flightTime" step="0.01" placeholder="e.g., 3.50" min="0" max="10">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Instructions* (one step per line)</label>
+                    <textarea id="instructions" placeholder="Stand in corner behind boxes&#10;Aim at the antenna&#10;Place molly on default plant spot&#10;Fire when you hear defuse" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks / Tips</label>
+                    <textarea id="remarks" placeholder="Works until 15 seconds left. Best used when you have info on enemy position."></textarea>
+                </div>
+
+                <h3 style="color: #ff8b94; margin: 1.5rem 0 1rem;">Upload Images</h3>
+                
+                <div class="image-upload-section">
+                    <div class="image-upload-box" onclick="document.getElementById('standingImage').click()">
+                        <input type="file" id="standingImage" accept="image/*" onchange="previewImage(this, 'standingPreview')">
+                        <div class="upload-label">📍 Standing Position</div>
+                        <div class="upload-hint">Where to stand</div>
+                        <img id="standingPreview" class="image-preview" style="display: none;">
+                    </div>
+                    
+                    <div class="image-upload-box" onclick="document.getElementById('lineupImage').click()">
+                        <input type="file" id="lineupImage" accept="image/*" onchange="previewImage(this, 'lineupPreview')">
+                        <div class="upload-label">🎯 Lineup/Crosshair</div>
+                        <div class="upload-hint">Where to aim</div>
+                        <img id="lineupPreview" class="image-preview" style="display: none;">
+                    </div>
+                    
+                    <div class="image-upload-box" onclick="document.getElementById('landingImage').click()">
+                        <input type="file" id="landingImage" accept="image/*" onchange="previewImage(this, 'landingPreview')">
+                        <div class="upload-label">💥 Landing Spot</div>
+                        <div class="upload-hint">Where molly lands</div>
+                        <img id="landingPreview" class="image-preview" style="display: none;">
+                    </div>
+                    
+                    <div class="image-upload-box" onclick="document.getElementById('instructionImage').click()">
+                        <input type="file" id="instructionImage" accept="image/*" onchange="previewImage(this, 'instructionPreview')">
+                        <div class="upload-label">📐 Lineup Instructions</div>
+                        <div class="upload-hint">Annotated/edited image with arrows</div>
+                        <img id="instructionPreview" class="image-preview" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">Upload Lineup</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">
+            <h3>Uploading images and saving lineup...</h3>
+        </div>
+
+        <div class="recent-lineups">
+            <h2>Recent Lineups</h2>
+            <div id="recentLineups" class="lineup-list">
+                <!-- Recent lineups will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://tyebdcxcusqiubmhdchu.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZWJkY3hjdXNxaXVibWhkY2h1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyMzI5ODgsImV4cCI6MjA3MDgwODk4OH0.pBrXmrw-mEpK1CTHGnE5F4qt7CjEUmzLtxSqCIiP7os';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let agents = [];
+        let maps = [];
+        let sites = [];
+        let currentMapId = null;
+
+        // Load initial data
+        async function loadInitialData() {
+            console.log('Loading initial data...');
+            try {
+                // Load agents
+                const { data: agentsData, error: agentsError } = await supabase
+                    .from('agents')
+                    .select('*')
+                    .order('display_name');
+                
+                if (agentsError) {
+                    console.error('Error loading agents:', agentsError);
+                    showError('Failed to load agents: ' + agentsError.message);
+                } else {
+                    console.log('Agents loaded:', agentsData);
+                    agents = agentsData || [];
+                    
+                    const agentSelect = document.getElementById('agent');
+                    agentSelect.innerHTML = '<option value="">Select Agent</option>';
+                    agents.forEach(agent => {
+                        const option = document.createElement('option');
+                        option.value = agent.id;
+                        option.textContent = agent.display_name;
+                        // Default to Brimstone
+                        if (agent.name === 'brimstone') {
+                            option.selected = true;
+                        }
+                        agentSelect.appendChild(option);
+                    });
+                }
+
+                // Load maps
+                const { data: mapsData, error: mapsError } = await supabase
+                    .from('maps')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('display_name');
+                
+                if (mapsError) {
+                    console.error('Error loading maps:', mapsError);
+                    showError('Failed to load maps: ' + mapsError.message);
+                } else {
+                    console.log('Maps loaded:', mapsData);
+                    maps = mapsData || [];
+                    
+                    const mapSelect = document.getElementById('map');
+                    mapSelect.innerHTML = '<option value="">Select Map</option>';
+                    maps.forEach(map => {
+                        const option = document.createElement('option');
+                        option.value = map.id;
+                        option.textContent = map.display_name;
+                        mapSelect.appendChild(option);
+                    });
+                }
+
+                // Load all sites
+                const { data: sitesData, error: sitesError } = await supabase
+                    .from('sites')
+                    .select('*')
+                    .order('name');
+                
+                if (sitesError) {
+                    console.error('Error loading sites:', sitesError);
+                    showError('Failed to load sites: ' + sitesError.message);
+                } else {
+                    console.log('Sites loaded:', sitesData);
+                    sites = sitesData || [];
+                }
+
+                // Load stats and recent lineups after data is loaded
+                if (agents.length > 0 && maps.length > 0) {
+                    loadStats();
+                    loadRecentLineups();
+                } else {
+                    console.warn('No agents or maps loaded - check your database tables');
+                    showError('No data found. Please check if your tables have data.');
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Failed to load initial data: ' + error.message);
+            }
+        }
+
+        // Handle map selection change
+        document.getElementById('map').addEventListener('change', function() {
+            const mapId = this.value;
+            currentMapId = mapId;
+            const siteSelect = document.getElementById('site');
+            
+            // Clear sites
+            siteSelect.innerHTML = '<option value="">Select Site</option>';
+            
+            if (mapId) {
+                siteSelect.disabled = false;
+                // Filter sites for selected map
+                const mapSites = sites.filter(site => site.map_id == mapId);
+                mapSites.forEach(site => {
+                    const option = document.createElement('option');
+                    option.value = site.id;
+                    option.textContent = site.display_name;
+                    siteSelect.appendChild(option);
+                });
+            } else {
+                siteSelect.disabled = true;
+            }
+        });
+
+        // Preview image
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const uploadBox = input.parentElement;
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    uploadBox.classList.add('has-image');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Upload image to Supabase Storage
+        async function uploadImage(file, path) {
+            try {
+                const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                const fullPath = `lineups/${path}/${fileName}`;
+                
+                const { data, error } = await supabase.storage
+                    .from('valorant-images')
+                    .upload(fullPath, file);
+
+                if (error) throw error;
+
+                // Get public URL
+                const { data: urlData } = supabase.storage
+                    .from('valorant-images')
+                    .getPublicUrl(fullPath);
+
+                return urlData.publicUrl;
+            } catch (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('lineupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            loading.classList.add('active');
+            
+            try {
+                // Get form values
+                const agentId = document.getElementById('agent').value;
+                const mapId = document.getElementById('map').value;
+                const siteId = document.getElementById('site').value;
+                const title = document.getElementById('title').value;
+                const type = document.getElementById('type').value;
+                const difficulty = document.getElementById('difficulty').value;
+                const stance = document.getElementById('stance').value;
+                const standingSpotName = document.getElementById('standingSpotName').value;
+                const landingSpotName = document.getElementById('landingSpotName').value;
+                const flightTime = document.getElementById('flightTime').value || null;
+                const instructions = document.getElementById('instructions').value;
+                const remarks = document.getElementById('remarks').value;
+                
+                // Get selected map name for folder structure
+                const selectedMap = maps.find(m => m.id == mapId);
+                const mapName = selectedMap ? selectedMap.name : 'unknown';
+                
+                // Upload images
+                let standingImageUrl = null;
+                let lineupImageUrl = null;
+                let landingImageUrl = null;
+                let instructionImageUrl = null;
+                
+                const standingFile = document.getElementById('standingImage').files[0];
+                const lineupFile = document.getElementById('lineupImage').files[0];
+                const landingFile = document.getElementById('landingImage').files[0];
+                const instructionFile = document.getElementById('instructionImage').files[0];
+                
+                if (standingFile) {
+                    standingImageUrl = await uploadImage(standingFile, `${mapName}/standing`);
+                }
+                if (lineupFile) {
+                    lineupImageUrl = await uploadImage(lineupFile, `${mapName}/lineup`);
+                }
+                if (landingFile) {
+                    landingImageUrl = await uploadImage(landingFile, `${mapName}/landing`);
+                }
+                if (instructionFile) {
+                    instructionImageUrl = await uploadImage(instructionFile, `${mapName}/instruction`);
+                }
+                
+                // Save to database
+                const { data, error } = await supabase
+                    .from('lineups')
+                    .insert([{
+                        agent_id: parseInt(agentId),
+                        map_id: parseInt(mapId),
+                        site_id: parseInt(siteId),
+                        title: title,
+                        type: type,
+                        difficulty: difficulty,
+                        stance: stance,
+                        standing_spot_name: standingSpotName,
+                        landing_spot_name: landingSpotName,
+                        flight_time: flightTime ? parseFloat(flightTime) : null,
+                        instructions: instructions,
+                        remarks: remarks,
+                        standing_image_url: standingImageUrl,
+                        lineup_image_url: lineupImageUrl,
+                        landing_image_url: landingImageUrl,
+                        instruction_image_url: instructionImageUrl
+                    }]);
+                
+                if (error) throw error;
+                
+                showSuccess('Lineup uploaded successfully!');
+                resetForm();
+                loadStats();
+                loadRecentLineups();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to upload lineup: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
+            }
+        });
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('lineupForm').reset();
+            // Clear image previews
+            ['standingPreview', 'lineupPreview', 'landingPreview', 'instructionPreview'].forEach(id => {
+                const preview = document.getElementById(id);
+                preview.style.display = 'none';
+                preview.src = '';
+            });
+            // Remove has-image class
+            document.querySelectorAll('.image-upload-box').forEach(box => {
+                box.classList.remove('has-image');
+            });
+            // Reset site dropdown
+            document.getElementById('site').innerHTML = '<option value="">Select Map First</option>';
+            document.getElementById('site').disabled = true;
+            // Clear new fields
+            document.getElementById('stance').value = '';
+            document.getElementById('standingSpotName').value = '';
+            document.getElementById('landingSpotName').value = '';
+            // Set Brimstone as default
+            const brimstone = agents.find(a => a.name === 'brimstone');
+            if (brimstone) {
+                document.getElementById('agent').value = brimstone.id;
+            }
+        }
+
+        // Load stats
+        async function loadStats() {
+            try {
+                // Total lineups
+                const { count: totalCount } = await supabase
+                    .from('lineups')
+                    .select('*', { count: 'exact', head: true });
+                document.getElementById('totalLineups').textContent = totalCount || 0;
+                
+                // Maps covered
+                const { data: mapsWithLineups } = await supabase
+                    .from('lineups')
+                    .select('map_id');
+                const uniqueMaps = new Set(mapsWithLineups?.map(l => l.map_id) || []);
+                document.getElementById('mapsCovered').textContent = uniqueMaps.size;
+                
+                // Today's uploads
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const { count: todayCount } = await supabase
+                    .from('lineups')
+                    .select('*', { count: 'exact', head: true })
+                    .gte('created_at', today.toISOString());
+                document.getElementById('todayUploads').textContent = todayCount || 0;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load recent lineups
+        async function loadRecentLineups() {
+            try {
+                const { data: lineups } = await supabase
+                    .from('lineups')
+                    .select(`
+                        *,
+                        agents!inner(display_name),
+                        maps!inner(display_name),
+                        sites!inner(display_name)
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                const container = document.getElementById('recentLineups');
+                
+                if (!lineups || lineups.length === 0) {
+                    container.innerHTML = '<p style="color: #888;">No lineups yet</p>';
+                    return;
+                }
+                
+                container.innerHTML = lineups.map(lineup => `
+                    <div class="lineup-item">
+                        <div class="lineup-info">
+                            <div class="lineup-title">${lineup.title}</div>
+                            <div class="lineup-meta">
+                                ${lineup.agents.display_name} • ${lineup.maps.display_name} • ${lineup.sites.display_name} • ${lineup.type}${lineup.stance ? ' • ' + lineup.stance : ''}
+                                ${lineup.standing_spot_name ? '<br>📍 ' + lineup.standing_spot_name : ''}
+                                ${lineup.landing_spot_name ? ' → 💥 ' + lineup.landing_spot_name : ''}
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteLineup(${lineup.id})">Delete</button>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading recent lineups:', error);
+            }
+        }
+
+        // Delete lineup
+        async function deleteLineup(id) {
+            if (!confirm('Are you sure you want to delete this lineup?')) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('lineups')
+                    .delete()
+                    .eq('id', id);
+                
+                if (error) throw error;
+                
+                showSuccess('Lineup deleted successfully');
+                loadStats();
+                loadRecentLineups();
+            } catch (error) {
+                console.error('Error deleting lineup:', error);
+                showError('Failed to delete lineup');
+            }
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('active');
+            setTimeout(() => {
+                successDiv.classList.remove('active');
+            }, 5000);
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+            setTimeout(() => {
+                errorDiv.classList.remove('active');
+            }, 5000);
+        }
+
+        // Create storage bucket if it doesn't exist
+        async function setupStorage() {
+            try {
+                // Check if bucket exists
+                const { data: buckets } = await supabase.storage.listBuckets();
+                
+                if (!buckets.find(b => b.name === 'valorant-images')) {
+                    // Create bucket
+                    const { data, error } = await supabase.storage.createBucket('valorant-images', {
+                        public: true
+                    });
+                    
+                    if (error && !error.message.includes('already exists')) {
+                        console.error('Error creating bucket:', error);
+                    } else {
+                        console.log('Storage bucket created successfully');
+                    }
+                }
+            } catch (error) {
+                console.error('Storage setup error:', error);
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('Page loaded, initializing...');
+            console.log('Supabase URL:', SUPABASE_URL);
+            console.log('Testing Supabase connection...');
+            
+            // Test connection
+            const { data: testData, error: testError } = await supabase
+                .from('agents')
+                .select('count');
+            
+            if (testError) {
+                console.error('Connection test failed:', testError);
+                if (testError.message.includes('not found')) {
+                    showError('Table "agents" not found. Please check your table names.');
+                } else if (testError.message.includes('JWT')) {
+                    showError('Authentication error. Please check your API key.');
+                } else if (testError.message.includes('Row Level Security')) {
+                    showError('Row Level Security is blocking access. Please check RLS policies.');
+                } else {
+                    showError('Database connection error: ' + testError.message);
+                }
+            } else {
+                console.log('Connection successful!');
+                loadInitialData();
+                setupStorage();
+            }
+        });
+    </script>
+</body>
+</html>
